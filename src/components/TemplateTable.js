@@ -3,7 +3,7 @@ import { Space, Table, Button } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import ModalForm from "./ModalForm";
 
-const DoctorTable = (props) => {
+const TemplateTable = (props) => {
     const [items, setItems] = useState(props.listItems);
     const [openModal, setOpenModal] = useState(false);
     const [editingItem, setEditingItem] = useState(null);
@@ -36,16 +36,7 @@ const DoctorTable = (props) => {
     };
 
     const columns = [
-        {
-            title: "Mã bác sĩ",
-            dataIndex: "id",
-            key: "id",
-        },
-        {
-            title: "Tên bác sĩ",
-            dataIndex: "name",
-            key: "name",
-        },
+        ...props.listColumns,
         {
             title: "Hành động",
             key: "actions",
@@ -54,10 +45,7 @@ const DoctorTable = (props) => {
                     <Button type="primary" onClick={() => editItem(record)}>
                         Sửa
                     </Button>
-                    <Button
-                        type="dashed"
-                        onClick={() => deleteItem(record.id)}
-                    >
+                    <Button type="dashed" onClick={() => deleteItem(record.id)}>
                         Xóa
                     </Button>
                 </Space>
@@ -86,4 +74,4 @@ const DoctorTable = (props) => {
     );
 };
 
-export default DoctorTable;
+export default TemplateTable;

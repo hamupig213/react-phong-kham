@@ -1,9 +1,8 @@
 import "./App.css";
-import DoctorTable from "./components/DoctorTable.js";
-import DepartmentTable from "./components/DepartmentTable.js";
 import PatientTable from "./components/PatientTable.js";
 import HeaderLayout from "./components/HeaderLayout.js";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import TemplateTable from "./components/TemplateTable.js";
 
 const listDoctors = [
     { id: "1", name: "Dr. A" },
@@ -36,6 +35,32 @@ const listPatients = [
     },
 ];
 
+const doctorColumns = [
+    {
+        title: "Mã bác sĩ",
+        dataIndex: "id",
+        key: "id",
+    },
+    {
+        title: "Tên bác sĩ",
+        dataIndex: "name",
+        key: "name",
+    },
+];
+
+const departmentColumns = [
+    {
+        title: "Mã khoa/phòng",
+        dataIndex: "id",
+        key: "id",
+    },
+    {
+        title: "Tên khoa/phòng",
+        dataIndex: "name",
+        key: "name",
+    },
+];
+
 function App() {
     return (
         <div className="app-container">
@@ -44,12 +69,20 @@ function App() {
                 <Routes>
                     <Route
                         path="doctor"
-                        element={<DoctorTable doctors={listDoctors} />}
+                        element={
+                            <TemplateTable
+                                listItems={listDoctors}
+                                listColumns={doctorColumns}
+                            />
+                        }
                     />
                     <Route
                         path="department"
                         element={
-                            <DepartmentTable departments={listDepartments} />
+                            <TemplateTable
+                                listItems={listDepartments}
+                                listColumns={departmentColumns}
+                            />
                         }
                     />
                     <Route

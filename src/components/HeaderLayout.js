@@ -15,12 +15,12 @@ const HeaderLayout = () => {
         token: { colorBgContainer, borderRadiusLG },
     } = theme.useToken();
 
-    const navigate = useNavigate(); // Hook để điều hướng
+    const navigate = useNavigate();
 
     const handleMenuClick = (e) => {
-        const selectedItem = labels[e.key]; // Lấy item dựa trên key
+        const selectedItem = labels[e.key];
         if (selectedItem) {
-            navigate(selectedItem.path); // Điều hướng đến đường dẫn tương ứng
+            navigate(selectedItem.path);
         }
     };
 

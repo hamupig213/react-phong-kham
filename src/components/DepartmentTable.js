@@ -4,7 +4,7 @@ import { PlusOutlined } from "@ant-design/icons";
 import ModalForm from "./ModalForm";
 
 const DepartmentTable = (props) => {
-    const [items, setItems] = useState(props.departments);
+    const [items, setItems] = useState(props.listItems);
     const [openModal, setOpenModal] = useState(false);
     const [editingItem, setEditingItem] = useState(null);
 
