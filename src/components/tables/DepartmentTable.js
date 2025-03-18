@@ -3,6 +3,7 @@ import { Space, Table, Button } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import ModalForm from "../modals/ModalForm";
 import axios from "axios";
+import { getAllDepartments } from "../../apis/DepartmentApi";
 
 const DepartmentTable = (props) => {
     const [departments, setDepartments] = useState([]);
@@ -10,14 +11,11 @@ const DepartmentTable = (props) => {
     const [editingItem, setEditingItem] = useState(null);
 
     useEffect(() => {
-        axios
-            .get("https://localhost:7183/api/department")
-            .then((response) => {
-                setDepartments(response.data); // Lưu vào state
-            })
-            .catch((error) => {
-                console.error("Lỗi khi gọi API:", error);
-            });
+        const fetchDepartments = async () => {
+            const res = await getAllDepartments();
+            setDepartments(res);
+        } 
+        fetchDepartments();
     }, []);
 
     const addItem = () => {

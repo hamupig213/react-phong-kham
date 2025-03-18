@@ -1,16 +1,14 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Form, Input, Button, Modal, Select } from "antd";
+import { getAllDoctors } from "../../apis/DoctorApi";
+import { getAllDepartments } from "../../apis/DepartmentApi";
 
-const PatientModal = ({
-    isModalOpen,
-    setOpenModal,
-    item,
-    updatePatient,
-    doctors,
-    departments,
-}) => {
+const PatientModal = ({ isModalOpen, setOpenModal, item, updatePatient }) => {
     const [form] = Form.useForm();
+    const [doctors, setDoctors] = useState([]);
+    const [departments, setDepartments] = useState([]);
 
+    // khởi tạo giá trị các trường trong modal
     useEffect(() => {
         form.setFieldsValue(
             item || {
@@ -23,6 +21,26 @@ const PatientModal = ({
             }
         );
     }, [item, form]);
+
+    // lấy giá trị của doctors từ api
+    useEffect(() => {
+        const fetchDoctors = async () => {
+            const res = await getAllDoctors(); // Chờ dữ liệu từ API
+            setDoctors(res);
+        };
+
+        fetchDoctors(); // Gọi hàm bất đồng bộ
+    }, []);
+
+    // lấy giá trị của departments từ api
+    useEffect(() => {
+        const fetchDepartments = async () => {
+            const res = await getAllDepartments(); // Chờ dữ liệu từ API
+            setDepartments(res);
+        };
+
+        fetchDepartments(); // Gọi hàm bất đồng bộ
+    }, []);
 
     const onFinish = (values) => {
         updatePatient(values);
