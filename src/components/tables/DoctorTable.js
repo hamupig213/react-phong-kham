@@ -3,6 +3,7 @@ import { Space, Table, Button } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import ModalForm from "../modals/ModalForm";
 import axios from "axios";
+import { getAllDoctors } from "../../apis/DoctorApi.js";
 
 const DoctorTable = (props) => {
     const [doctors, setDoctors] = useState([]);
@@ -10,14 +11,12 @@ const DoctorTable = (props) => {
     const [editingItem, setEditingItem] = useState(null);
 
     useEffect(() => {
-        axios
-            .get("https://localhost:7183/api/doctor")
-            .then((response) => {
-                setDoctors(response.data); // Lưu vào state
-            })
-            .catch((error) => {
-                console.error("Lỗi khi gọi API:", error);
-            });
+        const fetchDoctors = async () => {
+            const res = await getAllDoctors(); // Chờ dữ liệu từ API
+            setDoctors(res);
+        };
+
+        fetchDoctors(); // Gọi hàm bất đồng bộ
     }, []);
 
     const addItem = () => {
@@ -38,19 +37,6 @@ const DoctorTable = (props) => {
         setEditingItem(record);
         setOpenModal(true);
     };
-
-    // const updateItem = (updatedItem) => {
-    //     if (editingItem) {
-    //         setDoctors(
-    //             doctors.map((doc) =>
-    //                 doc.id === updatedItem.id ? updatedItem : doc
-    //             )
-    //         );
-    //     } else {
-    //         setDoctors([...doctors, updatedItem]);
-    //     }
-    //     setOpenModal(false);
-    // };
 
     const updateItem = async (updatedItem) => {
         if (editingItem) {

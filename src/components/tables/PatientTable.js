@@ -1,12 +1,25 @@
 import { Table, Button, Space } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import PatienModal from "../modals/PatientModal";
+import axios from "axios";
 
 const PatientTable = (props) => {
     const [items, setItems] = useState(props.patients);
     const [openModal, setOpenModal] = useState(false);
     const [editingItem, setEditingItem] = useState(null);
+
+    useEffect(() => {
+        axios
+            .get("https://localhost:7183/api/patient")
+            .then((response) => {
+                console.log(response.data);
+                setItems(response.data); // Lưu vào state
+            })
+            .catch((error) => {
+                console.error("Lỗi khi gọi API:", error);
+            });
+    }, []);
 
     const addItem = () => {
         setEditingItem(null);
@@ -48,8 +61,8 @@ const PatientTable = (props) => {
         },
         {
             title: "Năm sinh",
-            dataIndex: "birth_year",
-            key: "birth_year",
+            dataIndex: "yoB",
+            key: "yoB",
         },
         {
             title: "Giới tính",
@@ -58,18 +71,20 @@ const PatientTable = (props) => {
         },
         {
             title: "Số điện thoại",
-            dataIndex: "phone_number",
-            key: "phone_number",
+            dataIndex: "phoneNumber",
+            key: "phoneNumber",
         },
         {
             title: "Bác sĩ điều trị",
             dataIndex: "doctor",
             key: "doctor",
+            render: (doctor) => doctor?.name || "Chưa có bác sĩ",
         },
         {
             title: "Khoa/phòng",
             dataIndex: "department",
             key: "department",
+            render: (department) => department?.name || "Chưa có bác sĩ",
         },
         {
             title: "Hành động",
