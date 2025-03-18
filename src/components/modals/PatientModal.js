@@ -14,10 +14,11 @@ const PatientModal = ({ isModalOpen, setOpenModal, item, updatePatient }) => {
             item || {
                 id: "",
                 name: "",
-                birth_year: "",
+                yoB: "",
                 gender: "",
-                phone_number: "",
+                phoneNumber: "",
                 doctor: "",
+                department: "",
             }
         );
     }, [item, form]);
@@ -69,7 +70,7 @@ const PatientModal = ({ isModalOpen, setOpenModal, item, updatePatient }) => {
                     <Input />
                 </Form.Item>
                 <Form.Item
-                    name="birth_year"
+                    name="yoB"
                     label="Năm sinh"
                     rules={[
                         { required: true, message: "Vui lòng nhập năm sinh" },
@@ -93,7 +94,7 @@ const PatientModal = ({ isModalOpen, setOpenModal, item, updatePatient }) => {
                     />
                 </Form.Item>
                 <Form.Item
-                    name="phone_number"
+                    name="phoneNumber"
                     label="Số điện thoại"
                     rules={[
                         {

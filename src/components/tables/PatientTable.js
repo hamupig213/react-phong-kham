@@ -3,22 +3,42 @@ import { PlusOutlined } from "@ant-design/icons";
 import { useState, useEffect } from "react";
 import PatienModal from "../modals/PatientModal";
 import axios from "axios";
+import { getAllPatients } from "../../apis/PatientApi";
+import { getAllDoctors } from "../../apis/DoctorApi";
+import { getAllDepartments } from "../../apis/DepartmentApi";
 
 const PatientTable = (props) => {
-    const [items, setItems] = useState(props.patients);
+    const [patients, setPatients] = useState([]);
+    const [doctors, setDoctors] = useState([]);
+    const [departments, setDepartments] = useState([]);
     const [openModal, setOpenModal] = useState(false);
     const [editingItem, setEditingItem] = useState(null);
 
     useEffect(() => {
-        axios
-            .get("https://localhost:7183/api/patient")
-            .then((response) => {
-                console.log(response.data);
-                setItems(response.data); // Lưu vào state
-            })
-            .catch((error) => {
-                console.error("Lỗi khi gọi API:", error);
-            });
+        const fetchPatients = async () => {
+            const res = await getAllPatients();
+            setPatients(res);
+        };
+
+        fetchPatients();
+    }, []);
+
+    useEffect(() => {
+        const fetchDoctors = async () => {
+            const res = await getAllDoctors();
+            setDoctors(res);
+        };
+
+        fetchDoctors();
+    }, []);
+
+    useEffect(() => {
+        const fetchDepartments = async () => {
+            const res = await getAllDepartments();
+            setDepartments(res);
+        };
+
+        fetchDepartments();
     }, []);
 
     const addItem = () => {
@@ -27,7 +47,7 @@ const PatientTable = (props) => {
     };
 
     const deleteItem = (id) => {
-        setItems(items.filter((Item) => Item.id !== id));
+        setPatients(patients.filter((Item) => Item.id !== id));
     };
 
     const editItem = (record) => {
@@ -35,15 +55,52 @@ const PatientTable = (props) => {
         setOpenModal(true);
     };
 
-    const updateItem = (updatedItem) => {
+    const updateItem = async (updatedItem) => {
+        const doctor = doctors.find((d) => d.name === updatedItem.doctor);
+        const department = departments.find(
+            (dep) => dep.name === updatedItem.department
+        );
+
+        const updatedData = {
+            id: updatedItem.id,
+            name: updatedItem.name,
+            yoB: Number(updatedItem.yoB),
+            gender: updatedItem.gender === 1 ? "Nam" : "Nữ",
+            phoneNumber: updatedItem.phoneNumber,
+            doctor: doctor,
+            department: department,
+        };
+
+        console.log("Dữ liệu gửi lên API:", updatedData);
+
         if (editingItem) {
-            setItems(
-                items.map((doc) =>
-                    doc.id === updatedItem.id ? updatedItem : doc
-                )
-            );
+            try {
+                await axios.put(
+                    `https://localhost:7183/api/patient/${updatedItem.id}`,
+                    updatedData
+                );
+                setPatients(
+                    patients.map((doc) =>
+                        doc.id === updatedItem.id ? updatedItem : doc
+                    )
+                );
+            } catch (error) {
+                console.error("Lỗi khi cập nhật bệnh nhân:", error);
+            }
         } else {
-            setItems([...items, updatedItem]);
+            try {
+                console.log(updatedItem);
+                const response = await axios.post(
+                    "https://localhost:7183/api/patient",
+                    updatedData,
+                    {
+                        headers: { "Content-Type": "application/json" },
+                    }
+                );
+                setPatients([...patients, response.data]);
+            } catch (error) {
+                console.error("Lỗi khi thêm bệnh nhân:", error);
+            }
         }
         setOpenModal(false);
     };
@@ -101,6 +158,7 @@ const PatientTable = (props) => {
             ),
         },
     ];
+
     return (
         <>
             <Button
@@ -111,14 +169,12 @@ const PatientTable = (props) => {
             >
                 Thêm bệnh nhân
             </Button>
-            <Table columns={columns} dataSource={items} />
+            <Table columns={columns} dataSource={patients} />
             <PatienModal
                 isModalOpen={openModal}
                 setOpenModal={setOpenModal}
                 item={editingItem}
                 updatePatient={updateItem}
-                doctors={props.doctors}
-                departments={props.departments}
             />
         </>
     );

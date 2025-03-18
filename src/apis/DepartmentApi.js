@@ -10,4 +10,17 @@ const getAllDepartments = async () => {
     }
 };
 
-export { getAllDepartments };
+const getDepartmentById = async (id) => {
+    try {
+        const response = await axios.get(
+            `https://localhost:7183/api/department/${id}`
+        );
+        return response.data;
+    } catch (error) {
+        console.error("Lỗi khi gọi API:", error);
+        return null;
+    }
+};
+
+
+export { getAllDepartments, getDepartmentById };

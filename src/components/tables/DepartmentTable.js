@@ -14,7 +14,7 @@ const DepartmentTable = (props) => {
         const fetchDepartments = async () => {
             const res = await getAllDepartments();
             setDepartments(res);
-        } 
+        };
         fetchDepartments();
     }, []);
 
@@ -28,7 +28,7 @@ const DepartmentTable = (props) => {
             await axios.delete(`https://localhost:7183/api/department/${id}`);
             setDepartments(departments.filter((item) => item.id !== id));
         } catch (error) {
-            console.error("Lỗi khi xóa bác sĩ:", error);
+            console.error("Lỗi khi xóa khoa/phòng:", error);
         }
     };
 
@@ -50,7 +50,7 @@ const DepartmentTable = (props) => {
                     )
                 );
             } catch (error) {
-                console.error("Lỗi khi cập nhật bác sĩ:", error);
+                console.error("Lỗi khi cập nhật khoa/phòng:", error);
             }
         } else {
             try {
@@ -60,7 +60,7 @@ const DepartmentTable = (props) => {
                 );
                 setDepartments([...departments, response.data]); // Cập nhật danh sách bác sĩ từ phản hồi API
             } catch (error) {
-                console.error("Lỗi khi thêm bác sĩ:", error);
+                console.error("Lỗi khi thêm khoa/phòng:", error);
             }
         }
         setOpenModal(false);

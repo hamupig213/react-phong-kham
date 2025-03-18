@@ -3,8 +3,7 @@ import axios from "axios";
 const getAllDoctors = async () => {
     try {
         const response = await axios.get("https://localhost:7183/api/doctor");
-        console.log(response);
-        return response.data; // Trả về dữ liệu bác sĩ
+        return response.data; // Trả về dữ liệu
     } catch (error) {
         console.error("Lỗi khi gọi API:", error);
         return []; // Trả về mảng rỗng nếu có lỗi
@@ -29,7 +28,6 @@ const createDoctor = async (doctor) => {
             "https://localhost:7183/api/doctor",
             doctor
         );
-        console.log(response);
         return response.data;
     } catch (error) {
         console.error("Lỗi khi gọi API:", error);
