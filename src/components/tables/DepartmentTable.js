@@ -1,20 +1,37 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Space, Table, Button } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import ModalForm from "../modals/ModalForm";
+import axios from "axios";
 
 const DepartmentTable = (props) => {
-    const [items, setItems] = useState(props.listItems);
+    const [departments, setDepartments] = useState([]);
     const [openModal, setOpenModal] = useState(false);
     const [editingItem, setEditingItem] = useState(null);
+
+    useEffect(() => {
+        axios
+            .get("https://localhost:7183/api/department")
+            .then((response) => {
+                setDepartments(response.data); // Lưu vào state
+            })
+            .catch((error) => {
+                console.error("Lỗi khi gọi API:", error);
+            });
+    }, []);
 
     const addItem = () => {
         setEditingItem(null);
         setOpenModal(true);
     };
 
-    const deleteItem = (id) => {
-        setItems(items.filter((Item) => Item.id !== id));
+    const deleteItem = async (id) => {
+        try {
+            await axios.delete(`https://localhost:7183/api/department/${id}`);
+            setDepartments(departments.filter((item) => item.id !== id));
+        } catch (error) {
+            console.error("Lỗi khi xóa bác sĩ:", error);
+        }
     };
 
     const editItem = (record) => {
@@ -22,15 +39,31 @@ const DepartmentTable = (props) => {
         setOpenModal(true);
     };
 
-    const updateItem = (updatedItem) => {
+    const updateItem = async (updatedItem) => {
         if (editingItem) {
-            setItems(
-                items.map((doc) =>
-                    doc.id === updatedItem.id ? updatedItem : doc
-                )
-            );
+            try {
+                await axios.put(
+                    `https://localhost:7183/api/department/${updatedItem.id}`,
+                    updatedItem
+                );
+                setDepartments(
+                    departments.map((doc) =>
+                        doc.id === updatedItem.id ? updatedItem : doc
+                    )
+                );
+            } catch (error) {
+                console.error("Lỗi khi cập nhật bác sĩ:", error);
+            }
         } else {
-            setItems([...items, updatedItem]);
+            try {
+                const response = await axios.post(
+                    "https://localhost:7183/api/department",
+                    updatedItem
+                );
+                setDepartments([...departments, response.data]); // Cập nhật danh sách bác sĩ từ phản hồi API
+            } catch (error) {
+                console.error("Lỗi khi thêm bác sĩ:", error);
+            }
         }
         setOpenModal(false);
     };
@@ -72,7 +105,7 @@ const DepartmentTable = (props) => {
             >
                 Thêm khoa/phòng
             </Button>
-            <Table columns={columns} dataSource={items} rowKey="id" />
+            <Table columns={columns} dataSource={departments} rowKey="id" />
             <ModalForm
                 isModalOpen={openModal}
                 setOpenModal={setOpenModal}

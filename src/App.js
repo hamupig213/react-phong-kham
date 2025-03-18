@@ -1,8 +1,9 @@
 import "./App.css";
 import PatientTable from "./components/tables/PatientTable.js";
 import HeaderLayout from "./components/HeaderLayout.js";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import TemplateTable from "./components/tables/TemplateTable.js";
+import { BrowserRouter, Routes, Route, data } from "react-router-dom";
+import DoctorTable from "./components/tables/DoctorTable.js";
+import DepartmentTable from "./components/tables/DepartmentTable.js";
 
 const listDoctors = [
     { id: "1", name: "Dr. A" },
@@ -70,8 +71,8 @@ function App() {
                     <Route
                         path="doctor"
                         element={
-                            <TemplateTable
-                                listItems={listDoctors}
+                            <DoctorTable
+                                // listItems={doctors}
                                 listColumns={doctorColumns}
                             />
                         }
@@ -79,7 +80,7 @@ function App() {
                     <Route
                         path="department"
                         element={
-                            <TemplateTable
+                            <DepartmentTable
                                 listItems={listDepartments}
                                 listColumns={departmentColumns}
                             />

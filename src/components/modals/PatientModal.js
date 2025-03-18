@@ -1,7 +1,14 @@
 import React, { useEffect } from "react";
 import { Form, Input, Button, Modal, Select } from "antd";
 
-const PatientModal = ({ isModalOpen, setOpenModal, item, updatePatient, doctors, departments}) => {
+const PatientModal = ({
+    isModalOpen,
+    setOpenModal,
+    item,
+    updatePatient,
+    doctors,
+    departments,
+}) => {
     const [form] = Form.useForm();
 
     useEffect(() => {

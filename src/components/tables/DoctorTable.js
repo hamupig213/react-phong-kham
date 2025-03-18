@@ -1,20 +1,37 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Space, Table, Button } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import ModalForm from "../modals/ModalForm";
+import axios from "axios";
 
 const DoctorTable = (props) => {
-    const [items, setItems] = useState(props.listItems);
+    const [doctors, setDoctors] = useState([]);
     const [openModal, setOpenModal] = useState(false);
     const [editingItem, setEditingItem] = useState(null);
+
+    useEffect(() => {
+        axios
+            .get("https://localhost:7183/api/doctor")
+            .then((response) => {
+                setDoctors(response.data); // Lưu vào state
+            })
+            .catch((error) => {
+                console.error("Lỗi khi gọi API:", error);
+            });
+    }, []);
 
     const addItem = () => {
         setEditingItem(null);
         setOpenModal(true);
     };
 
-    const deleteItem = (id) => {
-        setItems(items.filter((Item) => Item.id !== id));
+    const deleteItem = async (id) => {
+        try {
+            await axios.delete(`https://localhost:7183/api/doctor/${id}`);
+            setDoctors(doctors.filter((item) => item.id !== id));
+        } catch (error) {
+            console.error("Lỗi khi xóa bác sĩ:", error);
+        }
     };
 
     const editItem = (record) => {
@@ -22,15 +39,44 @@ const DoctorTable = (props) => {
         setOpenModal(true);
     };
 
-    const updateItem = (updatedItem) => {
+    // const updateItem = (updatedItem) => {
+    //     if (editingItem) {
+    //         setDoctors(
+    //             doctors.map((doc) =>
+    //                 doc.id === updatedItem.id ? updatedItem : doc
+    //             )
+    //         );
+    //     } else {
+    //         setDoctors([...doctors, updatedItem]);
+    //     }
+    //     setOpenModal(false);
+    // };
+
+    const updateItem = async (updatedItem) => {
         if (editingItem) {
-            setItems(
-                items.map((doc) =>
-                    doc.id === updatedItem.id ? updatedItem : doc
-                )
-            );
+            try {
+                await axios.put(
+                    `https://localhost:7183/api/doctor/${updatedItem.id}`,
+                    updatedItem
+                );
+                setDoctors(
+                    doctors.map((doc) =>
+                        doc.id === updatedItem.id ? updatedItem : doc
+                    )
+                );
+            } catch (error) {
+                console.error("Lỗi khi cập nhật bác sĩ:", error);
+            }
         } else {
-            setItems([...items, updatedItem]);
+            try {
+                const response = await axios.post(
+                    "https://localhost:7183/api/doctor",
+                    updatedItem
+                );
+                setDoctors([...doctors, response.data]); // Cập nhật danh sách bác sĩ từ phản hồi API
+            } catch (error) {
+                console.error("Lỗi khi thêm bác sĩ:", error);
+            }
         }
         setOpenModal(false);
     };
@@ -72,7 +118,7 @@ const DoctorTable = (props) => {
             >
                 Thêm bác sĩ
             </Button>
-            <Table columns={columns} dataSource={items} rowKey="id" />
+            <Table columns={columns} dataSource={doctors} rowKey="id" />
             <ModalForm
                 isModalOpen={openModal}
                 setOpenModal={setOpenModal}
