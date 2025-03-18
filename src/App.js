@@ -1,8 +1,8 @@
 import "./App.css";
-import PatientTable from "./components/PatientTable.js";
+import PatientTable from "./components/tables/PatientTable.js";
 import HeaderLayout from "./components/HeaderLayout.js";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import TemplateTable from "./components/TemplateTable.js";
+import TemplateTable from "./components/tables/TemplateTable.js";
 
 const listDoctors = [
     { id: "1", name: "Dr. A" },

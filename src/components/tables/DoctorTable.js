@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { Space, Table, Button } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
-import ModalForm from "./ModalForm";
+import ModalForm from "../modals/ModalForm";
 
-const TemplateTable = (props) => {
+const DoctorTable = (props) => {
     const [items, setItems] = useState(props.listItems);
     const [openModal, setOpenModal] = useState(false);
     const [editingItem, setEditingItem] = useState(null);
@@ -36,7 +36,16 @@ const TemplateTable = (props) => {
     };
 
     const columns = [
-        ...props.listColumns,
+        {
+            title: "Mã bác sĩ",
+            dataIndex: "id",
+            key: "id",
+        },
+        {
+            title: "Tên bác sĩ",
+            dataIndex: "name",
+            key: "name",
+        },
         {
             title: "Hành động",
             key: "actions",
@@ -74,4 +83,4 @@ const TemplateTable = (props) => {
     );
 };
 
-export default TemplateTable;
+export default DoctorTable;

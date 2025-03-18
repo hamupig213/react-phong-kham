@@ -1,12 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Space, Table, Button } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
-import ModalForm from "./ModalForm";
+import ModalForm from "../modals/ModalForm";
 
-const DepartmentTable = (props) => {
+const TemplateTable = (props) => {
     const [items, setItems] = useState(props.listItems);
     const [openModal, setOpenModal] = useState(false);
     const [editingItem, setEditingItem] = useState(null);
+
+    useEffect(() => {
+        setItems(props.listItems);
+    }, [props.listItems]);
 
     const addItem = () => {
         setEditingItem(null);
@@ -36,16 +40,7 @@ const DepartmentTable = (props) => {
     };
 
     const columns = [
-        {
-            title: "Mã khoa/phòng",
-            dataIndex: "id",
-            key: "id",
-        },
-        {
-            title: "Tên khoa/phòng",
-            dataIndex: "name",
-            key: "name",
-        },
+        ...props.listColumns,
         {
             title: "Hành động",
             key: "actions",
@@ -70,7 +65,7 @@ const DepartmentTable = (props) => {
                 onClick={addItem}
                 style={{ margin: 16 }}
             >
-                Thêm khoa/phòng
+                Thêm bác sĩ
             </Button>
             <Table columns={columns} dataSource={items} rowKey="id" />
             <ModalForm
@@ -83,4 +78,4 @@ const DepartmentTable = (props) => {
     );
 };
 
-export default DepartmentTable;
+export default TemplateTable;

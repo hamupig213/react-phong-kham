@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { Space, Table, Button } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
-import ModalForm from "./ModalForm";
+import ModalForm from "../modals/ModalForm";
 
-const DoctorTable = (props) => {
+const DepartmentTable = (props) => {
     const [items, setItems] = useState(props.listItems);
     const [openModal, setOpenModal] = useState(false);
     const [editingItem, setEditingItem] = useState(null);
@@ -37,12 +37,12 @@ const DoctorTable = (props) => {
 
     const columns = [
         {
-            title: "Mã bác sĩ",
+            title: "Mã khoa/phòng",
             dataIndex: "id",
             key: "id",
         },
         {
-            title: "Tên bác sĩ",
+            title: "Tên khoa/phòng",
             dataIndex: "name",
             key: "name",
         },
@@ -54,10 +54,7 @@ const DoctorTable = (props) => {
                     <Button type="primary" onClick={() => editItem(record)}>
                         Sửa
                     </Button>
-                    <Button
-                        type="dashed"
-                        onClick={() => deleteItem(record.id)}
-                    >
+                    <Button type="dashed" onClick={() => deleteItem(record.id)}>
                         Xóa
                     </Button>
                 </Space>
@@ -73,7 +70,7 @@ const DoctorTable = (props) => {
                 onClick={addItem}
                 style={{ margin: 16 }}
             >
-                Thêm bác sĩ
+                Thêm khoa/phòng
             </Button>
             <Table columns={columns} dataSource={items} rowKey="id" />
             <ModalForm
@@ -86,4 +83,4 @@ const DoctorTable = (props) => {
     );
 };
 
-export default DoctorTable;
+export default DepartmentTable;

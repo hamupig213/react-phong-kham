@@ -1,39 +1,39 @@
 import { Table, Button, Space } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { useState } from "react";
-import PatienModal from "./PatientModal";
+import PatienModal from "../modals/PatientModal";
 
 const PatientTable = (props) => {
     const [items, setItems] = useState(props.patients);
     const [openModal, setOpenModal] = useState(false);
     const [editingItem, setEditingItem] = useState(null);
 
-   const addItem = () => {
-       setEditingItem(null);
-       setOpenModal(true);
-   };
+    const addItem = () => {
+        setEditingItem(null);
+        setOpenModal(true);
+    };
 
-   const deleteItem = (id) => {
-       setItems(items.filter((Item) => Item.id !== id));
-   };
+    const deleteItem = (id) => {
+        setItems(items.filter((Item) => Item.id !== id));
+    };
 
     const editItem = (record) => {
-       setEditingItem(record);
-       setOpenModal(true);
-   };
+        setEditingItem(record);
+        setOpenModal(true);
+    };
 
-   const updateItem = (updatedItem) => {
-       if (editingItem) {
-           setItems(
-               items.map((doc) =>
-                   doc.id === updatedItem.id ? updatedItem : doc
-               )
-           );
-       } else {
-           setItems([...items, updatedItem]);
-       }
-       setOpenModal(false);
-   };
+    const updateItem = (updatedItem) => {
+        if (editingItem) {
+            setItems(
+                items.map((doc) =>
+                    doc.id === updatedItem.id ? updatedItem : doc
+                )
+            );
+        } else {
+            setItems([...items, updatedItem]);
+        }
+        setOpenModal(false);
+    };
 
     const columns = [
         {
@@ -79,10 +79,7 @@ const PatientTable = (props) => {
                     <Button type="primary" onClick={() => editItem(record)}>
                         Sửa
                     </Button>
-                    <Button
-                        type="dashed"
-                        onClick={() => deleteItem(record.id)}
-                    >
+                    <Button type="dashed" onClick={() => deleteItem(record.id)}>
                         Xóa
                     </Button>
                 </Space>
