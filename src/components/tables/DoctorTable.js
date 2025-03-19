@@ -94,11 +94,14 @@ const DoctorTable = (props) => {
             title: "Mã bác sĩ",
             dataIndex: "id",
             key: "id",
+            defaultSortOrder: "ascend",
+            sorter: (a, b) => a.id.localeCompare(b.id),
         },
         {
             title: "Tên bác sĩ",
             dataIndex: "name",
             key: "name",
+            sorter: (a, b) => a.name.localeCompare(b.name),
         },
         {
             title: "Hành động",

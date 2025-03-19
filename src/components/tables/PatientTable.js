@@ -135,21 +135,31 @@ const PatientTable = (props) => {
             title: "Mã bệnh nhân",
             dataIndex: "id",
             key: "id",
+            defaultSortOrder: "ascend",
+            sorter: (a, b) => a.id.localeCompare(b.id),
         },
         {
             title: "Tên bệnh nhân",
             dataIndex: "name",
             key: "name",
+            sortDirections: ["descend", "ascend"],
+            sorter: (a, b) => a.name.localeCompare(b.name),
         },
         {
             title: "Năm sinh",
             dataIndex: "yoB",
             key: "yoB",
+            sorter: (a, b) => a.yoB - b.yoB,
         },
         {
             title: "Giới tính",
             dataIndex: "gender",
             key: "gender",
+            filters: [
+                { text: "Nam", value: "Nam" },
+                { text: "Nữ", value: "Nữ" },
+            ],
+            onFilter: (value, record) => record.gender === value,
         },
         {
             title: "Số điện thoại",
@@ -160,13 +170,23 @@ const PatientTable = (props) => {
             title: "Bác sĩ điều trị",
             dataIndex: "doctor",
             key: "doctor",
+            filters: doctors.map((doctor) => ({
+                text: doctor.name,
+                value: doctor.id,
+            })),
+            onFilter: (value, record) => record.doctor?.id === value,
             render: (doctor) => doctor?.name || "Chưa có bác sĩ",
         },
         {
             title: "Khoa/phòng",
             dataIndex: "department",
             key: "department",
-            render: (department) => department?.name || "Chưa có bác sĩ",
+            filters: departments.map((dep) => ({
+                text: dep.name,
+                value: dep.id,
+            })),
+            onFilter: (value, record) => record.department?.id === value,
+            render: (department) => department?.name || "Chưa có khoa/phòng",
         },
         {
             title: "Hành động",

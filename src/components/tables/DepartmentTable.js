@@ -93,11 +93,14 @@ const DepartmentTable = (props) => {
             title: "Mã khoa/phòng",
             dataIndex: "id",
             key: "id",
+            defaultSortOrder: "ascend",
+            sorter: (a, b) => a.id.localeCompare(b.id),
         },
         {
             title: "Tên khoa/phòng",
             dataIndex: "name",
             key: "name",
+            sorter: (a, b) => a.name.localeCompare(b.name),
         },
         {
             title: "Hành động",
