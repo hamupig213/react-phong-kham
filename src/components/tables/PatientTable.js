@@ -21,7 +21,7 @@ const PatientTable = (props) => {
         };
 
         fetchPatients();
-    }, []);
+    }, [patients]);
 
     useEffect(() => {
         const fetchDoctors = async () => {
@@ -46,8 +46,13 @@ const PatientTable = (props) => {
         setOpenModal(true);
     };
 
-    const deleteItem = (id) => {
-        setPatients(patients.filter((Item) => Item.id !== id));
+    const deleteItem = async (id) => {
+        try {
+            await axios.delete(`https://localhost:7183/api/patient/${id}`);
+            setPatients(patients.filter((item) => item.id !== id));
+        } catch (e) {
+            console.error("Lỗi khi xóa bệnh nhân:", e);
+        }
     };
 
     const editItem = (record) => {
