@@ -1,4 +1,4 @@
-import { Table, Button, Space } from "antd";
+import { Table, Button, Space, notification } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { useState, useEffect } from "react";
 import PatienModal from "../modals/PatientModal";
@@ -14,6 +14,7 @@ const PatientTable = (props) => {
     const [openModal, setOpenModal] = useState(false);
     const [editingItem, setEditingItem] = useState(null);
     const [refresh, setRefresh] = useState(false);
+    const [api, contextHolder] = notification.useNotification();
 
     useEffect(() => {
         const fetchPatients = async () => {
@@ -51,8 +52,15 @@ const PatientTable = (props) => {
         try {
             await axios.delete(`https://localhost:7183/api/patient/${id}`);
             setPatients(patients.filter((item) => item.id !== id));
-        } catch (e) {
-            console.error("Lỗi khi xóa bệnh nhân:", e);
+            api.info({
+                message: "Thành công",
+                description: "Đã xóa thành công!",
+            });
+        } catch (error) {
+            api.error({
+                message: "Lỗi",
+                description: error?.message || "Đã có lỗi xảy ra!!!",
+            });
         }
     };
 
@@ -62,9 +70,9 @@ const PatientTable = (props) => {
     };
 
     const updateItem = async (updatedItem) => {
-        const doctor = doctors.find((d) => d.name === updatedItem.doctor);
+        const doctor = doctors.find((d) => d.id === updatedItem.doctor);
         const department = departments.find(
-            (dep) => dep.name === updatedItem.department
+            (dep) => dep.id === updatedItem.department
         );
 
         const updatedData = {
@@ -90,22 +98,32 @@ const PatientTable = (props) => {
                         doc.id === updatedItem.id ? updatedItem : doc
                     )
                 );
+                api.success({
+                    message: "Thành công",
+                    description: "Đã cập nhật thành công!",
+                });
             } catch (error) {
-                console.error("Lỗi khi cập nhật bệnh nhân:", error);
+                api.error({
+                    message: "Lỗi",
+                    description: error?.message || "Đã có lỗi xảy ra!!!",
+                });
             }
         } else {
             try {
-                console.log(updatedItem);
                 const response = await axios.post(
                     "https://localhost:7183/api/patient",
-                    updatedData,
-                    {
-                        headers: { "Content-Type": "application/json" },
-                    }
+                    updatedData
                 );
                 setPatients([...patients, response.data]);
+                api.success({
+                    message: "Thành công",
+                    description: "Đã thêm mới thành công!",
+                });
             } catch (error) {
-                console.error("Lỗi khi thêm bệnh nhân:", error);
+                api.error({
+                    message: "Lỗi",
+                    description: error?.message || "Đã có lỗi xảy ra!!!",
+                });
             }
         }
         setRefresh(!refresh);
@@ -168,6 +186,7 @@ const PatientTable = (props) => {
 
     return (
         <>
+            {contextHolder}
             <Button
                 type="primary"
                 icon={<PlusOutlined />}

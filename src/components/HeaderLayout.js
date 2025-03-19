@@ -1,8 +1,6 @@
 import { Layout, Menu, theme } from "antd";
 import React from "react";
 import { useLocation, useNavigate } from "react-router";
-import ErrorModal from "./errors/ErrorModal.js"
-import Test from "./errors/ErrorModal.js";
 
 const { Header } = Layout;
 

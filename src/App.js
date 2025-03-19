@@ -1,7 +1,7 @@
 import "./App.css";
 import PatientTable from "./components/tables/PatientTable.js";
 import HeaderLayout from "./components/HeaderLayout.js";
-import { BrowserRouter, Routes, Route, data } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import DoctorTable from "./components/tables/DoctorTable.js";
 import DepartmentTable from "./components/tables/DepartmentTable.js";
 

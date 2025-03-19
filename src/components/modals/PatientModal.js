@@ -8,49 +8,40 @@ const PatientModal = ({ isModalOpen, setOpenModal, item, updatePatient }) => {
     const [doctors, setDoctors] = useState([]);
     const [departments, setDepartments] = useState([]);
 
-    // khởi tạo giá trị các trường trong modal
-    // useEffect(() => {
-    //     form.setFieldsValue(
-    //         item
-    //             ? {
-    //                   id: item.id,
-    //                   name: item.name,
-    //                   yoB: item.yoB,
-    //                   gender: item.gender,
-    //                   phoneNumber: item.phoneNumber,
-    //                   doctor: item.doctor.id,
-    //                   department: item.department.id,
-    //               }
-    //             : {
-    //                   id: "",
-    //                   name: "",
-    //                   yoB: "",
-    //                   gender: "",
-    //                   phoneNumber: "",
-    //                   doctor: "",
-    //                   department: "",
-    //               }
-    //     );
-    // }, [item]);
+    useEffect(() => {
+        if (item) {
+            form.setFieldsValue({
+                id: item.id,
+                name: item.name,
+                yoB: item.yoB,
+                gender: item.gender,
+                phoneNumber: item.phoneNumber,
+                doctor: item.doctor.id,
+                department: item.department.id,
+            });
+        } else {
+            form.resetFields();
+        }
+    }, [item, isModalOpen]);
 
     // lấy giá trị của doctors từ api
     useEffect(() => {
         const fetchDoctors = async () => {
-            const res = await getAllDoctors(); // Chờ dữ liệu từ API
+            const res = await getAllDoctors();
             setDoctors(res);
         };
 
-        fetchDoctors(); // Gọi hàm bất đồng bộ
+        fetchDoctors();
     }, []);
 
     // lấy giá trị của departments từ api
     useEffect(() => {
         const fetchDepartments = async () => {
-            const res = await getAllDepartments(); // Chờ dữ liệu từ API
+            const res = await getAllDepartments();
             setDepartments(res);
         };
 
-        fetchDepartments(); // Gọi hàm bất đồng bộ
+        fetchDepartments();
     }, []);
 
     const onFinish = (values) => {
@@ -68,7 +59,7 @@ const PatientModal = ({ isModalOpen, setOpenModal, item, updatePatient }) => {
                 <Form.Item
                     name="id"
                     label="Mã"
-                    initialValue={item?.id ?? null}
+                    //initialValue={item?.id ?? null}
                     rules={[{ required: true, message: "Vui lòng nhập ID" }]}
                 >
                     <Input disabled={!!item} />
@@ -76,7 +67,7 @@ const PatientModal = ({ isModalOpen, setOpenModal, item, updatePatient }) => {
                 <Form.Item
                     name="name"
                     label="Tên"
-                    initialValue={item?.name ?? null}
+                    //initialValue={item?.name ?? null}
                     rules={[{ required: true, message: "Vui lòng nhập tên" }]}
                 >
                     <Input />
@@ -84,7 +75,7 @@ const PatientModal = ({ isModalOpen, setOpenModal, item, updatePatient }) => {
                 <Form.Item
                     name="yoB"
                     label="Năm sinh"
-                    initialValue={item?.yoB ?? null}
+                    //initialValue={item?.yoB ?? null}
                     rules={[
                         { required: true, message: "Vui lòng nhập năm sinh" },
                     ]}
@@ -94,7 +85,7 @@ const PatientModal = ({ isModalOpen, setOpenModal, item, updatePatient }) => {
                 <Form.Item
                     name="gender"
                     label="Giới tính"
-                    initialValue={item?.gender ?? null}
+                    //initialValue={item?.gender ?? null}
                     rules={[
                         { required: true, message: "Vui lòng nhập giới tính" },
                     ]}
@@ -110,7 +101,7 @@ const PatientModal = ({ isModalOpen, setOpenModal, item, updatePatient }) => {
                 <Form.Item
                     name="phoneNumber"
                     label="Số điện thoại"
-                    initialValue={item?.phoneNumber ?? null}
+                    //initialValue={item?.phoneNumber ?? null}
                     rules={[
                         {
                             required: true,

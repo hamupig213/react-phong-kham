@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Space, Table, Button } from "antd";
+import { Space, Table, Button, notification } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import ModalForm from "../modals/ModalForm";
 import axios from "axios";
@@ -9,6 +9,7 @@ const DepartmentTable = (props) => {
     const [departments, setDepartments] = useState([]);
     const [openModal, setOpenModal] = useState(false);
     const [editingItem, setEditingItem] = useState(null);
+    const [api, contextHolder] = notification.useNotification();
 
     useEffect(() => {
         const fetchDepartments = async () => {
@@ -27,8 +28,15 @@ const DepartmentTable = (props) => {
         try {
             await axios.delete(`https://localhost:7183/api/department/${id}`);
             setDepartments(departments.filter((item) => item.id !== id));
+            api.info({
+                message: "Thành công",
+                description: "Đã xóa thành công!",
+            });
         } catch (error) {
-            console.error("Lỗi khi xóa khoa/phòng:", error);
+            api.error({
+                message: "Lỗi",
+                description: error?.message || "Đã có lỗi xảy ra!!!",
+            });
         }
     };
 
@@ -49,8 +57,15 @@ const DepartmentTable = (props) => {
                         doc.id === updatedItem.id ? updatedItem : doc
                     )
                 );
+                api.success({
+                    message: "Thành công",
+                    description: "Đã cập nhật thành công!",
+                });
             } catch (error) {
-                console.error("Lỗi khi cập nhật khoa/phòng:", error);
+                api.error({
+                    message: "Lỗi",
+                    description: error?.message || "Đã có lỗi xảy ra!!!",
+                });
             }
         } else {
             try {
@@ -59,8 +74,15 @@ const DepartmentTable = (props) => {
                     updatedItem
                 );
                 setDepartments([...departments, response.data]); // Cập nhật danh sách bác sĩ từ phản hồi API
+                api.success({
+                    message: "Thành công",
+                    description: "Đã thêm mới thành công!",
+                });
             } catch (error) {
-                console.error("Lỗi khi thêm khoa/phòng:", error);
+                api.error({
+                    message: "Lỗi",
+                    description: error?.message || "Đã có lỗi xảy ra!!!",
+                });
             }
         }
         setOpenModal(false);
@@ -95,6 +117,7 @@ const DepartmentTable = (props) => {
 
     return (
         <>
+            {contextHolder}
             <Button
                 type="primary"
                 icon={<PlusOutlined />}

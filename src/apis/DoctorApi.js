@@ -48,7 +48,7 @@ const updateDoctor = async (doctor) => {
     }
 };
 
-const deleteDoctor = async (doctor) => { 
+const deleteDoctor = async (doctor) => {
     try {
         const response = await axios.delete(
             `https://localhost:7183/api/doctor/${doctor.id}`
@@ -60,4 +60,10 @@ const deleteDoctor = async (doctor) => {
     }
 };
 
-export { getAllDoctors, getDoctorById, createDoctor, updateDoctor, deleteDoctor };
+export {
+    getAllDoctors,
+    getDoctorById,
+    createDoctor,
+    updateDoctor,
+    deleteDoctor,
+};

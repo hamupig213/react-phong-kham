@@ -4,8 +4,6 @@ import { PlusOutlined } from "@ant-design/icons";
 import ModalForm from "../modals/ModalForm";
 import axios from "axios";
 import { getAllDoctors } from "../../apis/DoctorApi.js";
-import { openNotificationWithIcon } from "../errors/ErrorModal.js";
-import { ToastContainer, toast } from "react-toastify";
 
 const DoctorTable = (props) => {
     const [doctors, setDoctors] = useState([]);
@@ -27,23 +25,18 @@ const DoctorTable = (props) => {
         setOpenModal(true);
     };
 
-    const openNotificationWithIcon = (type, message, description) => {
-        notification[type]({
-            message,
-            description,
-        });
-    };
-
     const deleteItem = async (id) => {
         try {
             await axios.delete(`https://localhost:7183/api/doctor/${id}`);
             setDoctors(doctors.filter((item) => item.id !== id));
+            api.info({
+                message: "Thành công",
+                description: "Đã xóa thành công!",
+            });
         } catch (error) {
-            // openNotificationWithIcon("error", "Lỗi khi xóa bác sĩ", error);
             api.error({
-                message: "Lỗi khi xóa bác sĩ",
-                description:
-                    error.response?.data?.message || "Đã có lỗi xảy ra",
+                message: "Lỗi",
+                description: error?.message || "Đã có lỗi xảy ra!!!",
             });
         }
     };
@@ -65,8 +58,15 @@ const DoctorTable = (props) => {
                         doc.id === updatedItem.id ? updatedItem : doc
                     )
                 );
+                api.success({
+                    message: "Thành công",
+                    description: "Đã cập nhật thành công!",
+                });
             } catch (error) {
-                console.error("Lỗi khi cập nhật bác sĩ:", error);
+                api.error({
+                    message: "Lỗi",
+                    description: error?.message || "Đã có lỗi xảy ra!!!",
+                });
             }
         } else {
             try {
@@ -75,8 +75,15 @@ const DoctorTable = (props) => {
                     updatedItem
                 );
                 setDoctors([...doctors, response.data]); // Cập nhật danh sách bác sĩ từ phản hồi API
+                api.success({
+                    message: "Thành công",
+                    description: "Đã thêm bác sĩ thành công!",
+                });
             } catch (error) {
-                console.error("Lỗi khi thêm bác sĩ:", error);
+                api.error({
+                    message: "Lỗi",
+                    description: error?.message || "Đã có lỗi xảy ra!!!",
+                });
             }
         }
         setOpenModal(false);
