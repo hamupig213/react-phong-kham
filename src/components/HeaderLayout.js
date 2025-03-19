@@ -1,6 +1,6 @@
 import { Layout, Menu, theme } from "antd";
 import React from "react";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 
 const { Header } = Layout;
 
@@ -11,11 +11,12 @@ const labels = [
 ];
 
 const HeaderLayout = () => {
+    const navigate = useNavigate();
+    const location = useLocation();
+
     const {
         token: { colorBgContainer, borderRadiusLG },
     } = theme.useToken();
-
-    const navigate = useNavigate();
 
     const handleMenuClick = (e) => {
         const selectedItem = labels[e.key];
@@ -23,6 +24,10 @@ const HeaderLayout = () => {
             navigate(selectedItem.path);
         }
     };
+
+    const selectedKey = labels
+        .findIndex((item) => item.path === location.pathname)
+        .toString();
 
     const items = labels.map((item, index) => ({
         key: index,
@@ -41,7 +46,7 @@ const HeaderLayout = () => {
                 <Menu
                     theme="dark"
                     mode="horizontal"
-                    defaultSelectedKeys={["0"]}
+                    selectedKeys={[selectedKey]}
                     items={items}
                     onClick={handleMenuClick}
                     style={{

@@ -13,6 +13,7 @@ const PatientTable = (props) => {
     const [departments, setDepartments] = useState([]);
     const [openModal, setOpenModal] = useState(false);
     const [editingItem, setEditingItem] = useState(null);
+    const [refresh, setRefresh] = useState(false);
 
     useEffect(() => {
         const fetchPatients = async () => {
@@ -21,7 +22,7 @@ const PatientTable = (props) => {
         };
 
         fetchPatients();
-    }, [patients]);
+    }, [refresh]);
 
     useEffect(() => {
         const fetchDoctors = async () => {
@@ -107,6 +108,7 @@ const PatientTable = (props) => {
                 console.error("Lỗi khi thêm bệnh nhân:", error);
             }
         }
+        setRefresh(!refresh);
         setOpenModal(false);
     };
 
