@@ -9,19 +9,29 @@ const PatientModal = ({ isModalOpen, setOpenModal, item, updatePatient }) => {
     const [departments, setDepartments] = useState([]);
 
     // khởi tạo giá trị các trường trong modal
-    useEffect(() => {
-        form.setFieldsValue(
-            item || {
-                id: "",
-                name: "",
-                yoB: "",
-                gender: "",
-                phoneNumber: "",
-                doctor: "",
-                department: "",
-            }
-        );
-    }, [item, form]);
+    // useEffect(() => {
+    //     form.setFieldsValue(
+    //         item
+    //             ? {
+    //                   id: item.id,
+    //                   name: item.name,
+    //                   yoB: item.yoB,
+    //                   gender: item.gender,
+    //                   phoneNumber: item.phoneNumber,
+    //                   doctor: item.doctor.id,
+    //                   department: item.department.id,
+    //               }
+    //             : {
+    //                   id: "",
+    //                   name: "",
+    //                   yoB: "",
+    //                   gender: "",
+    //                   phoneNumber: "",
+    //                   doctor: "",
+    //                   department: "",
+    //               }
+    //     );
+    // }, [item]);
 
     // lấy giá trị của doctors từ api
     useEffect(() => {
@@ -58,6 +68,7 @@ const PatientModal = ({ isModalOpen, setOpenModal, item, updatePatient }) => {
                 <Form.Item
                     name="id"
                     label="Mã"
+                    initialValue={item?.id ?? null}
                     rules={[{ required: true, message: "Vui lòng nhập ID" }]}
                 >
                     <Input disabled={!!item} />
@@ -65,6 +76,7 @@ const PatientModal = ({ isModalOpen, setOpenModal, item, updatePatient }) => {
                 <Form.Item
                     name="name"
                     label="Tên"
+                    initialValue={item?.name ?? null}
                     rules={[{ required: true, message: "Vui lòng nhập tên" }]}
                 >
                     <Input />
@@ -72,6 +84,7 @@ const PatientModal = ({ isModalOpen, setOpenModal, item, updatePatient }) => {
                 <Form.Item
                     name="yoB"
                     label="Năm sinh"
+                    initialValue={item?.yoB ?? null}
                     rules={[
                         { required: true, message: "Vui lòng nhập năm sinh" },
                     ]}
@@ -81,6 +94,7 @@ const PatientModal = ({ isModalOpen, setOpenModal, item, updatePatient }) => {
                 <Form.Item
                     name="gender"
                     label="Giới tính"
+                    initialValue={item?.gender ?? null}
                     rules={[
                         { required: true, message: "Vui lòng nhập giới tính" },
                     ]}
@@ -96,6 +110,7 @@ const PatientModal = ({ isModalOpen, setOpenModal, item, updatePatient }) => {
                 <Form.Item
                     name="phoneNumber"
                     label="Số điện thoại"
+                    initialValue={item?.phoneNumber ?? null}
                     rules={[
                         {
                             required: true,
@@ -105,23 +120,27 @@ const PatientModal = ({ isModalOpen, setOpenModal, item, updatePatient }) => {
                 >
                     <Input />
                 </Form.Item>
-                <Form.Item label="Bác sĩ điều trị" name="doctor">
-                    <Select>
-                        {doctors.map((doc) => (
-                            <Select.Option key={doc.id} value={doc.name}>
-                                {doc.name}
-                            </Select.Option>
-                        ))}
-                    </Select>
+                <Form.Item
+                    label="Bác sĩ điều trị"
+                    name="doctor"
+                    initialValue={item?.doctor?.id ?? null}
+                >
+                    <Select
+                        options={doctors.map((d) => {
+                            return { label: d.name, value: d.id };
+                        })}
+                    />
                 </Form.Item>
-                <Form.Item label="Khoa/phòng" name="department">
-                    <Select>
-                        {departments.map((dep) => (
-                            <Select.Option key={dep.id} value={dep.name}>
-                                {dep.name}
-                            </Select.Option>
-                        ))}
-                    </Select>
+                <Form.Item
+                    label="Khoa/phòng"
+                    name="department"
+                    initialValue={item?.department?.id ?? null}
+                >
+                    <Select
+                        options={departments.map((d) => {
+                            return { label: d.name, value: d.id };
+                        })}
+                    />
                 </Form.Item>
                 <Form.Item>
                     <Button type="primary" htmlType="submit">
