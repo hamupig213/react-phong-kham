@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Form, Input, Button, Modal, Select } from "antd";
 import { getAllDoctors } from "../../apis/DoctorApi";
 import { getAllDepartments } from "../../apis/DepartmentApi";
+import { validateYear } from "../validations/Validation";
 
 const PatientModal = ({ isModalOpen, setOpenModal, item, updatePatient }) => {
     const [form] = Form.useForm();
@@ -77,7 +78,10 @@ const PatientModal = ({ isModalOpen, setOpenModal, item, updatePatient }) => {
                     label="Năm sinh"
                     //initialValue={item?.yoB ?? null}
                     rules={[
-                        { required: true, message: "Vui lòng nhập năm sinh" },
+                        {
+                            required: true,
+                            validator: validateYear,
+                        },
                     ]}
                 >
                     <Input />
@@ -114,7 +118,13 @@ const PatientModal = ({ isModalOpen, setOpenModal, item, updatePatient }) => {
                 <Form.Item
                     label="Bác sĩ điều trị"
                     name="doctor"
-                    initialValue={item?.doctor?.id ?? null}
+                    //initialValue={item?.doctor?.id ?? null}
+                    rules={[
+                        {
+                            required: true,
+                            message: "Vui lòng chọn bác sĩ điều trị",
+                        },
+                    ]}
                 >
                     <Select
                         options={doctors.map((d) => {
@@ -125,7 +135,13 @@ const PatientModal = ({ isModalOpen, setOpenModal, item, updatePatient }) => {
                 <Form.Item
                     label="Khoa/phòng"
                     name="department"
-                    initialValue={item?.department?.id ?? null}
+                    //initialValue={item?.department?.id ?? null}
+                    rules={[
+                        {
+                            required: true,
+                            message: "Vui lòng chọn khoa/phòng",
+                        },
+                    ]}
                 >
                     <Select
                         options={departments.map((d) => {

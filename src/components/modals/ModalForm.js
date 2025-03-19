@@ -4,9 +4,20 @@ import { Modal, Form, Input, Button } from "antd";
 const ModalForm = ({ isModalOpen, setOpenModal, item, updateItem }) => {
     const [form] = Form.useForm();
 
+    // useEffect(() => {
+    //     form.setFieldsValue(item || { id: "", name: "" });
+    // }, [item, form]);
+
     useEffect(() => {
-        form.setFieldsValue(item || { id: "", name: "" });
-    }, [item, form]);
+        if (item) {
+            form.setFieldsValue({
+                id: item.id,
+                name: item.name,
+            });
+        } else {
+            form.resetFields();
+        }
+    }, [item, isModalOpen]);
 
     const onFinish = (values) => {
         updateItem(values);
